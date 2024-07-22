@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Espace{% endblock %}
+
+{% block stylesheets %}
+        {# Inclusion de Bootstrap CSS #}
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    body {
+        color: black;
+    }
+
+        h1 {
+        text-align: center;
+        margin: 40px;
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Bienvenue {{ firstname }} {{ name }}!</h1>
+
+    <p>Nom: {{ name }}</p>
+    <p>Prénom: {{ firstname }}</p>
+    <p>Email: {{ email }}</p>
+
+    <a href="{{ path('app_review') }}">Laisser un avis</a>
+
+    {# <p><strong>Vérifié:</strong> {{ verified ? 'Oui' : 'Non' }}</p> #}
+{% endblock %}

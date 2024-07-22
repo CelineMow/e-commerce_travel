@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Avis{% endblock %}
+
+{% block body %}
+    <h1>Laisser un avis</h1>
+
+    {{ form_start(form) }}
+        <div>
+            {{ form_label(form.rating) }}
+            {{ form_widget(form.rating) }}
+        </div>
+        <div>
+            {{ form_label(form.comment) }}
+            {{ form_widget(form.comment) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Soumettre</button>
+    {{ form_end(form) }}
+{% endblock %}

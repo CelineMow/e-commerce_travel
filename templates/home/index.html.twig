@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EasyVoyage{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .video-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 600px; 
+        overflow: hidden; 
+    }
+
+    video {
+        width: 2100px;
+        height: auto;
+        max-height: 600px; 
+        object-fit: cover; 
+    }
+
+    .container-card{
+        display: flex;
+        margin-top: 20px;
+        margin-left: 25%;
+        margin-right: 25%;
+    }
+
+    .children-container-card {
+	    display: flex;
+    	flex-direction: row;
+	    flex-wrap: wrap;
+	    justify-content: space-between;
+	    align-items: center;
+	    align-content: center;
+    }
+
+    .card {
+        margin-top: 50px;
+        box-shadow: 5px 5px 20px #88898C;
+    }
+
+    .card:hover {
+        box-shadow: 5px 5px 20px #565759;
+    }
+
+    .btn.btn-primary {
+        background-color: #45C4B0;
+        border: #45C4B0;
+        color: #fff;
+    }
+
+    .btn.btn-primary:hover {
+        background-color: #13678A;
+        border: #13678A;
+    }
+
+    .search-container {
+        width: 100%;
+        max-width: 1500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #012030;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .trip-type {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .trip-type label {
+        margin-right: 20px;
+    }
+
+    .search-fields {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: end; /* Pour aligner les champs au bas */
+    }
+
+    .search-fields div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    input[type="text"], input[type="date"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #45C4B0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        align-self: flex-end; /* Pour aligner le bouton à droite */
+        margin-top: 25px; /* Pour ajuster l'alignement vertical */
+    }
+
+    button:hover {
+        background-color: #13678A;
+    }
+
+    label {
+        margin-right: 20px;
+    }
+
+</style>
+
+<script>
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const depart = document.getElementById('depart').value;
+    const arrivee = document.getElementById('arrivee').value;
+    const dateDepart = document.getElementById('dateDepart').value;
+    const dateArrivee = document.getElementById('dateArrivee').value;
+    const voyageurs = document.getElementById('voyageurs').value;
+
+    if (depart && arrivee && dateDepart && dateArrivee && voyageurs) {
+        console.log(`Recherche de voyage de ${depart} à ${arrivee} du ${dateDepart} au ${dateArrivee} pour ${voyageurs}`);
+        // Vous pouvez maintenant utiliser ces valeurs pour effectuer une recherche ou appeler une API
+    } else {
+        alert('Veuillez remplir tous les champs');
+    }
+});
+</script>
+{% endblock %}
+
+{% block body %}
+
+{# Video #}
+    <div class="video-container">
+        <video autoplay loop muted>
+            <source src="{{ asset('media/tortue.mp4') }}" type="video/mp4">
+            Votre navigateur ne supporte pas la balise vidéo.
+        </video>
+    </div>
+
+{# Barre de recherche de vols, destination etc #}
+    <div class="search-container">
+        <form id="searchForm">
+            <div class="trip-type">
+                <label>
+                    <input type="radio" name="tripType" value="aller-retour" checked>
+                    Aller-retour
+                </label>
+                <label>
+                    <input type="radio" name="tripType" value="aller-simple">
+                    Aller simple
+                </label>
+            </div>
+            <div class="search-fields">
+                <div>
+                    <label for="depart">De</label>
+                    <input type="text" id="depart" name="depart" placeholder="Pays, ville ou aéroport" required>
+                </div>
+                <div>
+                    <label for="arrivee">Vers</label>
+                    <input type="text" id="arrivee" name="arrivee" placeholder="Pays, ville ou aéroport" required>
+                </div>
+                <div>
+                    <label for="dateDepart">Départ</label>
+                    <input type="date" id="dateDepart" name="dateDepart" required>
+                </div>
+                <div>
+                    <label for="dateArrivee">Retour</label>
+                    <input type="date" id="dateArrivee" name="dateArrivee" required>
+                </div>
+                <div>
+                    <label for="voyageurs">Voyageurs et classe</label>
+                    <input type="text" id="voyageurs" name="voyageurs" placeholder="1 adulte, Économique" required>
+                </div>
+                <button type="submit">Rechercher</button>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" name="aeroportsProximite">
+                    Ajouter des aéroports à proximité
+                </label>
+                <label>
+                    <input type="checkbox" name="volsDirects">
+                    Vols directs uniquement
+                </label>
+            </div>
+        </form>
+    </div>
+
+
+
+{# Quelques destinations #}
+    <div class="container-card">
+        <div class="children-container-card">
+            <div class="card" style="width: 18rem;">
+                <img src="{{ asset('media/paris.jpg') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">PARIS</h5>
+                    <p class="card-text">France</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <img src="{{ asset('media/marrakech.jpg') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">MARRAKECH</h5>
+                    <p class="card-text">Maroc</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <img src="{{ asset('media/rome.jpg') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">ROME</h5>
+                    <p class="card-text">Italie</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <img src="{{ asset('media/mykonos.jpg') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">MYKONOS</h5>
+                    <p class="card-text">Grèce</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <img src="{{ asset('media/porto.jpg') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">PORTO</h5>
+                    <p class="card-text">Portugal</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <img src="{{ asset('media/japon.jpg') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">TOKYO</h5>
+                    <p class="card-text">Japon</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

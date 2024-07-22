@@ -1,0 +1,198 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis{% endblock %}
+
+{% block stylesheets %}
+    {# Inclusion de Bootstrap CSS #}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            color: black;
+        }
+
+        .btn.btn-primary {
+            background-color: #45C4B0;
+            border: #45C4B0;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .btn.btn-primary:hover {
+            background-color: #13678A;
+            border: #13678A;
+        }
+
+        .centerObjects {
+            margin-right: 20%;
+            margin-left: 20%;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 40px;
+        }
+
+        .form-control.custom-width {
+            width: 100%;
+            max-width: 600px; /* Vous pouvez ajuster cette valeur selon vos besoins */
+            margin: 10px 0; /* Ajoute de l'espace vertical entre les champs */
+        }
+
+        .review-card {
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            box-shadow: 5px 5px 20px #D4D5D6; /* Ombre portée personnalisée */
+            padding: 15px;
+            min-height: 200px; /* Assure une hauteur minimale uniforme */
+            max-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .card-text {
+            font-size: 0.875rem;
+            overflow: hidden; /* Cache le texte débordant */
+            white-space: normal; /* Permet le retour à la ligne du texte */
+        }
+
+        .card-text.expandable {
+            position: relative;
+            max-height: 50px; /* Hauteur initiale visible du texte */
+            overflow: hidden; /* Cache le texte débordant */
+            transition: max-height 0.3s ease;
+        }
+
+        .card-text.expandable.expanded {
+            max-height: none; /* Enlève la limite de hauteur */
+        }
+
+        .rating-container {
+            display: flex;
+            gap: 5px;
+            font-size: 1.5em; /* Ajustez la taille des cœurs selon vos besoins */
+            color: #6C757D; /* Couleur des cœurs, par exemple rouge */
+            cursor: pointer; /* Ajoute un curseur pointeur */
+        }
+
+        .rating-container i {
+            margin-right: 5px; /* Espace entre les cœurs */
+        }
+
+        a {
+            color: #198288;
+            text-decoration: none;
+            transition: color 0.3s ease; 
+        }
+
+        a:hover {
+            color: #012030;
+            text-decoration: none;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Avis</h1>
+
+    {% if app.user %}
+    <div class="centerObjects">
+        <h2>Laisser un avis</h2>
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.rating, 'Note') }}
+                <div class="rating-container">
+                    {% for i in 1..5 %}
+                        <i class="bi bi-suit-heart" data-value="{{ i }}"></i>
+                    {% endfor %}
+                </div>
+                {{ form_widget(form.rating, {'attr': {'class': 'd-none'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.comment) }}
+                {{ form_widget(form.comment) }}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Soumettre</button>
+        {{ form_end(form) }}
+    {% else %}
+        <p>Vous devez être connecté pour laisser un avis. <a href="{{ path('app_login') }}"> Se connecter </a></p>
+    {% endif %}
+    </div>
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            {% for review in reviews %}
+                <div class="col-md-4 mb-4">
+                    <div class="card review-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ review.user.firstname }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <div class="rating">
+                                    {% for i in 1..5 %}
+                                        {% if i <= review.rating %}
+                                            <i class="bi bi-suit-heart-fill"></i>
+                                        {% else %}
+                                            <i class="bi bi-suit-heart"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </h6>
+                            <p class="card-text expandable">
+                                {{ review.comment }}
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">Posté le {{ review.createdAt|date('d/m/Y H:i') }}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fonction pour gérer la mise à jour des icônes de rating
+            const ratingIcons = document.querySelectorAll('.rating-container i');
+            const ratingField = document.querySelector('#review_rating'); // ID du champ de note caché
+
+            ratingIcons.forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    ratingField.value = value;
+                    updateRatingDisplay(value);
+                });
+            });
+
+            function updateRatingDisplay(value) {
+                ratingIcons.forEach(icon => {
+                    if (parseInt(icon.getAttribute('data-value')) <= value) {
+                        icon.classList.add('bi-suit-heart-fill');
+                        icon.classList.remove('bi-suit-heart');
+                    } else {
+                        icon.classList.add('bi-suit-heart');
+                        icon.classList.remove('bi-suit-heart-fill');
+                    }
+                });
+            }
+
+            // Initial update
+            updateRatingDisplay(ratingField.value || 0);
+
+        });
+    </script>
+{% endblock %}

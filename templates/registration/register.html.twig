@@ -1,0 +1,67 @@
+{# templates/registration/register.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block stylesheets %}
+        {# Inclusion de Bootstrap CSS #}
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    body {
+        color: black;
+    }
+
+    .btn.btn-primary {
+        background-color: #45C4B0;
+        border: #45C4B0;
+        color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .btn.btn-primary:hover {
+        background-color: #13678A;
+        border: #13678A;
+    }
+
+    .centerObjects {
+        margin-right: 20%;
+        margin-left: 20%;
+    }
+
+    h1 {
+        text-align: center;
+        margin: 40px;
+    }
+
+        .form-control.custom-width {
+        width: 100%;
+        max-width: 600px; /* Vous pouvez ajuster cette valeur selon vos besoins */
+        margin: 10px 0; /* Ajoute de l'espace vertical entre les champs */
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Inscription</h1>
+    {{ form_start(registrationForm) }}
+ <div class="row">
+        <div class="col-md-6">
+            {{ form_row(registrationForm.email, {'attr': {'class': 'form-control custom-width'}}) }}
+            {{ form_row(registrationForm.plainPassword.first, {'attr': {'class': 'form-control custom-width'}}) }}
+            {{ form_row(registrationForm.plainPassword.second, {'attr': {'class': 'form-control custom-width'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(registrationForm.name, {'attr': {'class': 'form-control custom-width'}}) }}
+            {{ form_row(registrationForm.firstname, {'attr': {'class': 'form-control custom-width'}}) }}
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary">S'inscrire</button>
+    </div>
+    {{ form_end(registrationForm) }}
+</div>
+{% endblock %}
